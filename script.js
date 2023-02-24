@@ -19,11 +19,14 @@ class Line {
     this.history = [{ x: this.x, y: this.y }];
     this.lineWidth = Math.floor(Math.random() * 5 + 1);
     this.hue = Math.floor(Math.random() * 360); // Color on the HUE Spectrum - Like RGB
-    this.maxLength = Math.floor(Math.random() * 50 + 10);
+    this.maxLength = Math.floor(Math.random() * 150 + 10);
     this.speedX = Math.random() * 5 - 0.5;
     this.speedY = 7;
     this.lifeSpan = this.maxLength * 3;
     this.timer = 0;
+    this.angle = 0;
+    this.curve = 0.1;
+    this.vc = 0.025;
   }
 
   draw(context) {
@@ -41,9 +44,11 @@ class Line {
 
   update() {
     this.timer++;
+    this.angle += 0.1;
+    this.curve += this.vc;
     if (this.timer < this.lifeSpan) {
-      this.x += this.speedX + Math.random() * 20 - 10;
-      this.y += this.speedY + Math.random() * 20 - 10;
+      this.x += Math.sin(this.angle) * this.curve;
+      this.y += Math.cos(this.angle) * this.curve;
       this.history.push({ x: this.x, y: this.y });
 
       if (this.history.length > this.maxLength) {
@@ -61,11 +66,14 @@ class Line {
     this.y = Math.random() * this.canvas.height;
     this.history = [{ x: this.x, y: this.y }];
     this.timer = 0;
+    this.angle = 0;
+    this.curve = 0.1;
+    this.vc = 0.025;
   }
 }
 
 const linesArray = [];
-const numberOfLines = 100;
+const numberOfLines = 15;
 
 for (let i = 0; i < numberOfLines; i++) {
   linesArray.push(new Line(canvas));
